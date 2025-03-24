@@ -1,3 +1,28 @@
+import 'package:uuid/uuid.dart';
+
+enum IngredientCategory {
+  protein,
+  vegetable,
+  fruit,
+  grains
+  dairy,
+  spices,
+  herbs,
+  condiments,
+  other
+}
+
+enum DietaryTag {
+  vegetarian,
+  vegan,
+  glutenFree,
+  dairyFree,
+  nutFree,
+  kosher,
+  halal,
+  lowSodium
+}
+
 enum MealCategory {
   breakfast,
   lunch,
@@ -7,21 +32,30 @@ enum MealCategory {
 }
 
 class Ingredient {
+  final String id;
   String name;
   double quantity;
   String unit; 
 
    Ingredient({
+    String? id,
     required this.name,
     this.quantity = 1.0,
     this.unit = '',
-  });
+  }) :id = id ?? const Uuid().v4();
 
-  String displayString() { 
-  return quantity > 0 
-    ? '$quantity $unit $name' 
-    : name; 
+  //Method to display ingredient with optional nutritional info
+  String getIngredient({bool includeNutrition = false}){
+    String baseString = '$quantity $unit $name';
+
+    if (includeNutrition && calories != null){
+      baseString += ' (${calories!.toStringAsFixed(0)}cal)';
+    }
+
+    return baseString
   }
+  
+ 
 }
 
 class Recipe {
